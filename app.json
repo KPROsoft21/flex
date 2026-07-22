@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "Nine Flash",
+    "description": "A quick 3x3 reaction game with easy and hard modes for Expo Go.",
+    "slug": "nine-flash",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "nineflash",
+    "primaryColor": "#08101d",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#08101d"
+    },
+    "ios": {
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "com.local.nineflash"
+    }
+  }
+}

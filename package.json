@@ -1,0 +1,17 @@
+{
+  "name": "nine-flash",
+  "version": "1.0.0",
+  "private": true,
+  "main": "expo/AppEntry.js",
+  "scripts": {
+    "start": "EXPO_NO_TELEMETRY=1 npx expo start",
+    "android": "EXPO_NO_TELEMETRY=1 npx expo start --android",
+    "ios": "EXPO_NO_TELEMETRY=1 npx expo start --ios",
+    "web": "EXPO_NO_TELEMETRY=1 npx expo start --web"
+  },
+  "dependencies": {
+    "expo": "~54.0.34",
+    "react": "19.1.0",
+    "react-native": "0.81.0"
+  }
+}
