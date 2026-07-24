@@ -1,7 +1,7 @@
 # flex
 
 <p align="center">
-  <img src="./favicon.png" alt="flex logo" width="140" />
+  <img src="./flex-logo.png" alt="flex logo" width="140" />
 </p>
 
 A retro arcade reaction game built for Expo Go.
