@@ -369,16 +369,16 @@ export default function App() {
             size === 'large' ? styles.retroTitleShadow : styles.pageTitleShadow,
             { color: theme.accent, transform: [{ translateX: offsetA }] }
           ]}>
-          NINE FLASH
+          FLEX
         </Animated.Text>
         <Animated.Text
           style={[
             size === 'large' ? styles.retroTitleShadow : styles.pageTitleShadow,
             { color: RED_COLOR, transform: [{ translateX: offsetB }], opacity: 0.75 }
           ]}>
-          NINE FLASH
+          FLEX
         </Animated.Text>
-        <Text style={[size === 'large' ? styles.retroTitle : styles.pageTitle, { color: theme.text }]}>NINE FLASH</Text>
+        <Text style={[size === 'large' ? styles.retroTitle : styles.pageTitle, { color: theme.text }]}>FLEX</Text>
       </View>
     );
   }

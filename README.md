@@ -1,8 +1,8 @@
-# Nine Flash
+# flex
 
 A retro arcade reaction game built for Expo Go.
 
-Nine Flash is a 3x3 tap-speed game with glitchy CRT visuals, multiple cabinet skins, Easy and Hard modes, and session leaderboards.
+flex is a 3x3 tap-speed game with glitchy CRT visuals, multiple cabinet skins, Easy and Hard modes, and session leaderboards.
 
 ## Features
 

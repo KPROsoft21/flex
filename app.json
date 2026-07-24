@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Nine Flash",
-    "description": "A quick 3x3 reaction game with easy and hard modes for Expo Go.",
-    "slug": "nine-flash",
+    "name": "flex",
+    "description": "A retro arcade 3x3 reaction game with easy and hard modes for Expo Go.",
+    "slug": "flex",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "nineflash",
+    "scheme": "flex",
     "primaryColor": "#08101d",
     "userInterfaceStyle": "dark",
     "splash": {
@@ -15,7 +15,7 @@
       "supportsTablet": false
     },
     "android": {
-      "package": "com.local.nineflash"
+      "package": "com.local.flex"
     }
   }
 }
