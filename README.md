@@ -1,5 +1,9 @@
 # flex
 
+<p align="center">
+  <img src="./favicon.png" alt="flex logo" width="140" />
+</p>
+
 A retro arcade reaction game built for Expo Go.
 
 flex is a 3x3 tap-speed game with glitchy CRT visuals, multiple cabinet skins, Easy and Hard modes, and session leaderboards.

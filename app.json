@@ -6,6 +6,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "flex",
+    "icon": "./favicon.png",
     "primaryColor": "#08101d",
     "userInterfaceStyle": "dark",
     "splash": {
@@ -16,6 +17,9 @@
     },
     "android": {
       "package": "com.local.flex"
+    },
+    "web": {
+      "favicon": "./favicon.png"
     }
   }
 }
