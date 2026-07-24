@@ -101,6 +101,7 @@ export default function App() {
   const activeIndexRef = useRef(-1);
   const activeKindRef = useRef('safe');
   const acceptingInputRef = useRef(false);
+  const crackTimerRef = useRef(null);
   const drift = useRef(new Animated.Value(0)).current;
   const glitch = useRef(new Animated.Value(0)).current;
   const alarm = useRef(new Animated.Value(0)).current;
@@ -113,6 +114,7 @@ export default function App() {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [activeKind, setActiveKind] = useState('safe');
   const [activeColor, setActiveColor] = useState(SAFE_COLORS[0]);
+  const [crackedIndex, setCrackedIndex] = useState(-1);
   const [message, setMessage] = useState('Insert coin');
   const [running, setRunning] = useState(false);
   const [lastGameOver, setLastGameOver] = useState('');
@@ -160,6 +162,10 @@ export default function App() {
       clearTimeout(timerRef.current);
       timerRef.current = null;
     }
+    if (crackTimerRef.current) {
+      clearTimeout(crackTimerRef.current);
+      crackTimerRef.current = null;
+    }
   }
 
   function goTo(nextScreen) {
@@ -185,6 +191,17 @@ export default function App() {
     activeKindRef.current = 'safe';
     acceptingInputRef.current = false;
     setActiveIndex(-1);
+  }
+
+  function showCrack(index) {
+    if (crackTimerRef.current) {
+      clearTimeout(crackTimerRef.current);
+    }
+    setCrackedIndex(index);
+    crackTimerRef.current = setTimeout(() => {
+      setCrackedIndex(-1);
+      crackTimerRef.current = null;
+    }, 170);
   }
 
   function triggerAlarm(text) {
@@ -287,6 +304,7 @@ export default function App() {
     }
 
     const nextScore = score + 1;
+    showCrack(index);
     setScore(nextScore);
     clearActiveTile();
     setMessage(nextScore % 10 === 0 ? 'Speed up' : 'Hit');
@@ -442,6 +460,7 @@ export default function App() {
     const tiles = [];
     for (let index = 0; index < 9; index += 1) {
       const active = activeIndex === index;
+      const cracked = crackedIndex === index;
       tiles.push(
         <Pressable
           key={index}
@@ -451,14 +470,17 @@ export default function App() {
             {
               width: cellSize,
               height: cellSize,
-              backgroundColor: active ? activeColor : theme.tile,
-              borderColor: active ? '#ffffff' : theme.line,
-              shadowColor: active ? activeColor : theme.shadow
+              backgroundColor: active ? activeColor : cracked ? '#171717' : theme.tile,
+              borderColor: active || cracked ? '#ffffff' : theme.line,
+              shadowColor: active ? activeColor : cracked ? RED_COLOR : theme.shadow
             },
             active && styles.tileLit,
+            cracked && styles.tileCracked,
             pressed && styles.pressed
           ]}>
-          <Text style={[styles.tileGlyph, { color: active ? '#080808' : theme.line }]}>{active ? '!' : '+'}</Text>
+          {active || cracked ? renderTileBreak(activeColor, active, cracked) : (
+            <Text style={[styles.idleGlyph, { color: theme.line }]}>+</Text>
+          )}
         </Pressable>
       );
     }
@@ -493,6 +515,23 @@ export default function App() {
         ) : (
           <View style={styles.quit}>{renderButton('QUIT', () => goTo('home'))}</View>
         )}
+      </View>
+    );
+  }
+
+  function renderTileBreak(color, active, cracked) {
+    const lineColor = cracked ? '#ffffff' : '#080808';
+    const shardColor = cracked ? RED_COLOR : color;
+
+    return (
+      <View pointerEvents="none" style={styles.breakLayer}>
+        <View style={[styles.glitchBlock, styles.glitchBlockA, { backgroundColor: shardColor }]} />
+        <View style={[styles.glitchBlock, styles.glitchBlockB, { backgroundColor: active ? '#ffffff' : shardColor }]} />
+        <View style={[styles.glitchBlock, styles.glitchBlockC, { backgroundColor: active ? '#080808' : '#ffffff' }]} />
+        <View style={[styles.crackLine, styles.crackLineA, { backgroundColor: lineColor }]} />
+        <View style={[styles.crackLine, styles.crackLineB, { backgroundColor: lineColor }]} />
+        <View style={[styles.crackLine, styles.crackLineC, { backgroundColor: lineColor }]} />
+        <View style={[styles.crackLine, styles.crackLineD, { backgroundColor: lineColor }]} />
       </View>
     );
   }
@@ -848,9 +887,70 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     elevation: 7
   },
-  tileGlyph: {
+  tileCracked: {
+    shadowOpacity: 0.85,
+    shadowRadius: 18,
+    elevation: 7
+  },
+  idleGlyph: {
     fontSize: 32,
     fontWeight: '900'
+  },
+  breakLayer: {
+    ...StyleSheet.absoluteFillObject,
+    overflow: 'hidden'
+  },
+  glitchBlock: {
+    position: 'absolute',
+    height: 9,
+    opacity: 0.82
+  },
+  glitchBlockA: {
+    left: '13%',
+    right: '20%',
+    top: '24%'
+  },
+  glitchBlockB: {
+    left: '28%',
+    right: '12%',
+    top: '47%',
+    height: 7
+  },
+  glitchBlockC: {
+    left: '16%',
+    right: '34%',
+    top: '68%',
+    height: 6,
+    opacity: 0.66
+  },
+  crackLine: {
+    position: 'absolute',
+    width: 4,
+    borderRadius: 2
+  },
+  crackLineA: {
+    height: '58%',
+    left: '49%',
+    top: '14%',
+    transform: [{ rotate: '21deg' }]
+  },
+  crackLineB: {
+    height: '34%',
+    left: '36%',
+    top: '38%',
+    transform: [{ rotate: '-42deg' }]
+  },
+  crackLineC: {
+    height: '32%',
+    right: '31%',
+    top: '35%',
+    transform: [{ rotate: '52deg' }]
+  },
+  crackLineD: {
+    height: '23%',
+    left: '58%',
+    bottom: '13%',
+    transform: [{ rotate: '-25deg' }]
   },
   quit: {
     marginTop: 20
