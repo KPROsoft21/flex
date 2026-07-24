@@ -72,6 +72,76 @@ const THEMES = [
     accent: '#39d7ff',
     accent2: '#ffef5e',
     shadow: '#169cff'
+  },
+  {
+    id: 'volcano',
+    name: 'Lava Score',
+    bg: '#140202',
+    bg2: '#3a0707',
+    panel: '#250606',
+    tile: '#321111',
+    line: '#ff3b1f',
+    text: '#fff1e8',
+    muted: '#e28b72',
+    accent: '#ff3b1f',
+    accent2: '#ffd447',
+    shadow: '#ff1f00'
+  },
+  {
+    id: 'terminal',
+    name: 'Blue Terminal',
+    bg: '#020a12',
+    bg2: '#052942',
+    panel: '#061827',
+    tile: '#0a2132',
+    line: '#1cf7ff',
+    text: '#e8feff',
+    muted: '#7bc9d0',
+    accent: '#1cf7ff',
+    accent2: '#77ff66',
+    shadow: '#1ca7ff'
+  },
+  {
+    id: 'laser',
+    name: 'Laser Pink',
+    bg: '#110016',
+    bg2: '#42003c',
+    panel: '#25002c',
+    tile: '#32003e',
+    line: '#ff2fa8',
+    text: '#fff0fb',
+    muted: '#ed9bd6',
+    accent: '#ff2fa8',
+    accent2: '#fffb6a',
+    shadow: '#ff00a8'
+  },
+  {
+    id: 'toxic',
+    name: 'Toxic Coin',
+    bg: '#071000',
+    bg2: '#163400',
+    panel: '#102000',
+    tile: '#182d05',
+    line: '#b8ff21',
+    text: '#f5ffe5',
+    muted: '#b1d574',
+    accent: '#b8ff21',
+    accent2: '#20ffd0',
+    shadow: '#8cff00'
+  },
+  {
+    id: 'mono',
+    name: 'Mono Ghost',
+    bg: '#050505',
+    bg2: '#1e1e1e',
+    panel: '#111111',
+    tile: '#1c1c1c',
+    line: '#f4f4f4',
+    text: '#ffffff',
+    muted: '#a9a9a9',
+    accent: '#ffffff',
+    accent2: '#ff4343',
+    shadow: '#ffffff'
   }
 ];
 
@@ -490,7 +560,7 @@ export default function App() {
             active && styles.tileLit
           ]}>
           <Pressable onPressIn={() => pressTile(index)} style={styles.tilePressArea}>
-            <Text style={[styles.idleGlyph, { color: active ? '#080808' : theme.line }]}>+</Text>
+            <Text style={[styles.idleGlyph, { color: active ? '#080808' : theme.line }]}>{active ? '!' : '+'}</Text>
           </Pressable>
         </Animated.View>
       );
@@ -910,32 +980,32 @@ const styles = StyleSheet.create({
     marginBottom: 14
   },
   themeList: {
-    marginTop: 8,
-    marginBottom: 16
+    marginTop: 6,
+    marginBottom: 12
   },
   themeChoice: {
-    minHeight: 62,
+    minHeight: 48,
     borderRadius: 4,
     borderWidth: 2,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 14,
-    marginBottom: 10,
+    marginBottom: 7,
     shadowOpacity: 0.34,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 0 },
     elevation: 3
   },
   swatch: {
-    width: 34,
-    height: 34,
+    width: 28,
+    height: 28,
     borderRadius: 2,
     borderWidth: 2,
     marginRight: 12
   },
   themeName: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '900'
   },
   themeMark: {
