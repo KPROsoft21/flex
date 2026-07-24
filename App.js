@@ -102,7 +102,6 @@ export default function App() {
   const activeKindRef = useRef('safe');
   const acceptingInputRef = useRef(false);
   const tilePulse = useRef(Array.from({ length: 9 }, () => new Animated.Value(0))).current;
-  const tileBreak = useRef(Array.from({ length: 9 }, () => new Animated.Value(0))).current;
   const tileLoops = useRef(Array.from({ length: 9 }, () => null)).current;
   const drift = useRef(new Animated.Value(0)).current;
   const glitch = useRef(new Animated.Value(0)).current;
@@ -215,15 +214,6 @@ export default function App() {
     tilePulse[index].setValue(0);
   }
 
-  function animateTileBreak(index) {
-    tileBreak[index].stopAnimation();
-    tileBreak[index].setValue(0);
-    Animated.sequence([
-      Animated.timing(tileBreak[index], { toValue: 1, duration: 85, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
-      Animated.timing(tileBreak[index], { toValue: 0, duration: 210, easing: Easing.in(Easing.cubic), useNativeDriver: true })
-    ]).start();
-  }
-
   function triggerAlarm(text) {
     setAlarmText(text);
     alarm.stopAnimation();
@@ -319,13 +309,11 @@ export default function App() {
     acceptingInputRef.current = false;
 
     if (activeKindRef.current === 'trap') {
-      animateTileBreak(index);
       endGame('You tapped red');
       return;
     }
 
     const nextScore = score + 1;
-    animateTileBreak(index);
     setScore(nextScore);
     clearActiveTile();
     setMessage(nextScore % 10 === 0 ? 'Speed up' : 'Hit');
@@ -483,9 +471,6 @@ export default function App() {
       const active = activeIndex === index;
       const pulseShift = tilePulse[index].interpolate({ inputRange: [-1, 0, 1], outputRange: [-5, 0, 5] });
       const pulseScale = tilePulse[index].interpolate({ inputRange: [-1, 0, 1], outputRange: [1.03, 1, 0.98] });
-      const breakScale = tileBreak[index].interpolate({ inputRange: [0, 0.35, 1], outputRange: [1, 0.86, 1.24] });
-      const breakRotate = tileBreak[index].interpolate({ inputRange: [0, 1], outputRange: ['0deg', '-8deg'] });
-      const breakOpacity = tileBreak[index].interpolate({ inputRange: [0, 0.08, 0.82, 1], outputRange: [0, 1, 1, 0] });
       tiles.push(
         <Animated.View
           key={index}
@@ -505,21 +490,8 @@ export default function App() {
             active && styles.tileLit
           ]}>
           <Pressable onPressIn={() => pressTile(index)} style={styles.tilePressArea}>
-            {active ? renderTileSignal(activeColor, tilePulse[index]) : (
-              <Text style={[styles.idleGlyph, { color: theme.line }]}>+</Text>
-            )}
+            <Text style={[styles.idleGlyph, { color: active ? '#080808' : theme.line }]}>+</Text>
           </Pressable>
-          <Animated.View
-            pointerEvents="none"
-            style={[
-              styles.tileBurst,
-              {
-                opacity: breakOpacity,
-                transform: [{ scale: breakScale }, { rotate: breakRotate }]
-              }
-            ]}>
-            {renderTileCrack(activeColor, tileBreak[index])}
-          </Animated.View>
         </Animated.View>
       );
     }
@@ -554,34 +526,6 @@ export default function App() {
         ) : (
           <View style={styles.quit}>{renderButton('QUIT', () => goTo('home'))}</View>
         )}
-      </View>
-    );
-  }
-
-  function renderTileSignal(color, motion) {
-    const leftShift = motion.interpolate({ inputRange: [-1, 0, 1], outputRange: [3, -2, 6] });
-    const rightShift = motion.interpolate({ inputRange: [-1, 0, 1], outputRange: [-5, 2, -3] });
-
-    return (
-      <View pointerEvents="none" style={styles.breakLayer}>
-        <Animated.View style={[styles.glitchBlock, styles.glitchBlockA, { backgroundColor: '#ffffff', transform: [{ translateX: leftShift }] }]} />
-        <Animated.View style={[styles.glitchBlock, styles.glitchBlockB, { backgroundColor: '#080808', transform: [{ translateX: rightShift }] }]} />
-        <Animated.View style={[styles.glitchBlock, styles.glitchBlockC, { backgroundColor: color, transform: [{ translateX: leftShift }] }]} />
-      </View>
-    );
-  }
-
-  function renderTileCrack(color, burst) {
-    const flyA = burst.interpolate({ inputRange: [0, 1], outputRange: [0, -18] });
-    const flyB = burst.interpolate({ inputRange: [0, 1], outputRange: [0, 16] });
-    const flyC = burst.interpolate({ inputRange: [0, 1], outputRange: [0, 22] });
-
-    return (
-      <View pointerEvents="none" style={styles.breakLayer}>
-        <Animated.View style={[styles.crackShard, styles.crackShardA, { backgroundColor: color, transform: [{ translateX: flyA }, { rotate: '21deg' }] }]} />
-        <Animated.View style={[styles.crackShard, styles.crackShardB, { backgroundColor: '#ffffff', transform: [{ translateX: flyB }, { rotate: '-45deg' }] }]} />
-        <Animated.View style={[styles.crackShard, styles.crackShardC, { backgroundColor: RED_COLOR, transform: [{ translateY: flyC }, { rotate: '58deg' }] }]} />
-        <Animated.View style={[styles.crackShard, styles.crackShardD, { backgroundColor: '#080808', transform: [{ translateY: flyA }, { rotate: '-18deg' }] }]} />
       </View>
     );
   }
@@ -946,65 +890,6 @@ const styles = StyleSheet.create({
   idleGlyph: {
     fontSize: 32,
     fontWeight: '900'
-  },
-  tileBurst: {
-    ...StyleSheet.absoluteFillObject
-  },
-  breakLayer: {
-    ...StyleSheet.absoluteFillObject,
-    overflow: 'hidden'
-  },
-  glitchBlock: {
-    position: 'absolute',
-    height: 9,
-    opacity: 0.82
-  },
-  glitchBlockA: {
-    left: '13%',
-    right: '20%',
-    top: '24%'
-  },
-  glitchBlockB: {
-    left: '28%',
-    right: '12%',
-    top: '47%',
-    height: 7
-  },
-  glitchBlockC: {
-    left: '16%',
-    right: '34%',
-    top: '68%',
-    height: 6,
-    opacity: 0.66
-  },
-  crackShard: {
-    position: 'absolute',
-    borderRadius: 2,
-    opacity: 0.92
-  },
-  crackShardA: {
-    width: 7,
-    height: '60%',
-    left: '49%',
-    top: '12%'
-  },
-  crackShardB: {
-    width: 6,
-    height: '42%',
-    left: '30%',
-    top: '33%'
-  },
-  crackShardC: {
-    width: 8,
-    height: '38%',
-    right: '27%',
-    top: '28%'
-  },
-  crackShardD: {
-    width: 5,
-    height: '32%',
-    left: '58%',
-    bottom: '11%'
   },
   quit: {
     marginTop: 20
