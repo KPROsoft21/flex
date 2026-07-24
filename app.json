@@ -6,10 +6,12 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "flex",
-    "icon": "./favicon.png",
+    "icon": "./assets/flex-icon.png",
     "primaryColor": "#08101d",
     "userInterfaceStyle": "dark",
     "splash": {
+      "image": "./assets/flex-icon.png",
+      "resizeMode": "contain",
       "backgroundColor": "#08101d"
     },
     "ios": {
@@ -19,7 +21,7 @@
       "package": "com.local.flex"
     },
     "web": {
-      "favicon": "./favicon.png"
+      "favicon": "./assets/flex-icon.png"
     }
   }
 }
